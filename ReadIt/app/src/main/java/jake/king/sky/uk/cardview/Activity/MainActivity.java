@@ -7,6 +7,8 @@ import android.os.Bundle;
 import jake.king.sky.uk.cardview.Fragment.FragmentHandler;
 import jake.king.sky.uk.cardview.R;
 
+//https://www.reddit.com/api/v1/authorize?client_id=KKnonOdJqwiMmA&response_type=code&state=ddwedw&redirect_uri=http://jki12.github.io/ReadIt/&duration=permanent&scope=mysubreddits
+
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
