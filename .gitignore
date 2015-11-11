@@ -1,0 +1,8 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+/ReadIt/app/src/main/java/jake/king/sky/uk/cardview/utils/SensitiveData.java
