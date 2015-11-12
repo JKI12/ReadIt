@@ -3,6 +3,7 @@ package jake.king.sky.uk.cardview.Activity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -39,7 +40,17 @@ public class MainActivity extends AppCompatActivity {
                 view.loadUrl(url);
                 return true;
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url){
+
+
+
+            }
         });
+
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
 
         webView.loadUrl(requestUrlMaker.getRequestString());
 

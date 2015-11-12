@@ -17,7 +17,7 @@ public class RequestUrlMaker {
     }
 
     private void setRequestString(){
-        String requestUrl = "https://www.reddit.com/api/v1/authorize.compact?";
+        String requestUrl = "https://www.reddit.com/api/v1/authorize?";
         String client_id = "client_id=" + sd.CLIENT_ID;
         String response_type = "response_type=code";
         String state = "state=" + randomStringGen();
