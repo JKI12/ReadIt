@@ -3,16 +3,18 @@ package jake.king.sky.uk.cardview.Activity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import jake.king.sky.uk.cardview.Fragment.FragmentHandler;
 import jake.king.sky.uk.cardview.R;
-
-//https://www.reddit.com/api/v1/authorize?client_id=KKnonOdJqwiMmA&response_type=code&state=ddwedw&redirect_uri=http://jki12.github.io/ReadIt/&duration=permanent&scope=mysubreddits
+import jake.king.sky.uk.cardview.Utils.RequestUrlMaker;
 
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private FragmentHandler fragmentHandler;
+    private RequestUrlMaker requestUrlMaker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,25 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         fragmentHandler = new FragmentHandler(fragmentManager);
+        requestUrlMaker = new RequestUrlMaker();
+
+        initWebView();
+
+    }
+
+    private void initWebView() {
+        WebView webView = (WebView) findViewById(R.id.redditRequest);
+
+        webView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+
+        webView.loadUrl(requestUrlMaker.getRequestString());
 
     }
 }
