@@ -7,8 +7,18 @@
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
   }
 
-  console.log(getParameterByName("error"));
-  console.log(getParameterByName("code"));
-  console.log(getParameterByName("state"));
+  var error = getParameterByName("error");
+  var code = getParameterByName("code");
+  var state = getParameterByName("state");
+
+  var jsonString = '
+    {
+    "error":' + error + '
+    "code":' + code + '
+    "state":' + state + '
+    }
+  ';
+
+  console.log(jsonString);
 
 </script>
