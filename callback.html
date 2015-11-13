@@ -13,6 +13,8 @@
 
   var jsonString = '{"error":"' + error + '", "code":"' + code + '", "state":"' + state + '"}';
 
-  document.write(jsonString);
+  document.getElementById("jsonString").innerHTML = jsonString;
 
 </script>
+
+<p id="jsonString"></p>
