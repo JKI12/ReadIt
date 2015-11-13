@@ -1,3 +1,5 @@
+<p id="jsonString"></p>
+
 <script type="text/javascript">
 
   function getParameterByName(name) {
@@ -7,16 +9,12 @@
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
   }
 
-  function getUrl(){
-    var error = getParameterByName("error");
-    var code = getParameterByName("code");
-    var state = getParameterByName("state");
+  var error = getParameterByName("error");
+  var code = getParameterByName("code");
+  var state = getParameterByName("state");
 
-    var jsonString = '{"error":"' + error + '", "code":"' + code + '", "state":"' + state + '"}';
+  var jsonString = '{"error":"' + error + '", "code":"' + code + '", "state":"' + state + '"}';
 
-    document.getElementById("jsonString").innerHTML = jsonString;
-  }
+  document.getElementById("jsonString").innerHTML = jsonString;
 
 </script>
-
-<p id="jsonString" onload="getUrl()"></p>
