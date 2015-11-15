@@ -10,10 +10,10 @@
   }
 
   var error = getParameterByName("error");
-  var token = getParameterByName("token");
+  var code = getParameterByName(code);
   var state = getParameterByName("state");
 
-  var jsonString = '{"error":"' + error + '", "token":"' + token + '", "state":"' + state + '"}';
+  var jsonString = '{"error":"' + error + '", "code":"' + code + '", "state":"' + state + '"}';
 
   document.getElementById("jsonString").innerHTML = jsonString;
 
