@@ -2,53 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jar="C:\Users\JK\Documents\GitHub\ReadIt\ReadIt\app\build\intermediates\exploded-aar\com.android.support\design\23.1.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
-        <dex dex="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-0a7a9296a843b103fe8bc14cc438212390a30b69.jar" />
-    </item>
-    <item
-        jar="/Users/jki12/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
-        <dex dex="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-96782c91f932f425763d225ddf02c16f8d75b6db.jar" />
-    </item>
-    <item
-        jar="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
-        <dex dex="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/pre-dexed/debug/classes-b13d46f5fce213aef848c566cbbbffe92edf6c07.jar" />
-    </item>
-    <item
-        jar="/Users/jki12/.gradle/caches/modules-2/files-2.1/eu.the4thfloor.volley/com.android.volley/2015.05.28/b0b08cc0ac897e596abe6b263a9507cba875b705/com.android.volley-2015.05.28.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="b0b08cc0ac897e596abe6b263a9507cba875b705">
-        <dex dex="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/pre-dexed/debug/com.android.volley-2015.05.28-fb97f754f4584b60d46f2bc5e57ab679e069b10b.jar" />
-    </item>
-    <item
-        jar="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
-        <dex dex="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/pre-dexed/debug/classes-f483e224273fc8ca9bd2db55fcecbb2ad9043c9b.jar" />
-    </item>
-    <item
-        jar="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
-        <dex dex="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/pre-dexed/debug/classes-4ce2cbc59caa8d31bc0300e544eb8d03063be334.jar" />
-    </item>
-    <item
-        jar="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="d96886efea7cc74fbb3abd0e3b51d5638fc57be0">
-        <dex dex="/Users/jki12/Documents/Git/ReadItSite/ReadIt/ReadIt/app/build/intermediates/pre-dexed/debug/classes-29d26fabe4d8032f7a60503d87e642cdffb220a7.jar" />
+        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
+        <dex dex="C:\Users\JK\Documents\GitHub\ReadIt\ReadIt\app\build\intermediates\pre-dexed\debug\classes-379dfa5343b6305e3af38f894bf26a8d22e8950f.jar" />
     </item>
 
 </items>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Readit</string>
+    <string name="title_activity_readitview">ReaditviewActivity</string>
 </resources>

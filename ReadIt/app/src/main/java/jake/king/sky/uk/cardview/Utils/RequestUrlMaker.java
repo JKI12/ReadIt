@@ -23,7 +23,7 @@ public class RequestUrlMaker {
         String state = "state=" + randomStringGen();
         String reditect_uri = "redirect_uri=" + sd.REDIRECT_URI;
         String duration = "duration=permanent";
-        String scope = "scope=identity,mysubreddits";
+        String scope = "scope=identity,mysubreddits,mysubscriptions";
 
         requestString = requestUrl + client_id + "&" + response_type + "&" + state + "&" + reditect_uri + "&" + duration + "&" + scope;
 
@@ -36,7 +36,7 @@ public class RequestUrlMaker {
 
         int numberOfChars = rnd.nextInt(20);
 
-        for (int i = 0; i < numberOfChars; i++) {
+        for (int i = 0; i < numberOfChars + 1; i++) {
             int x = rnd.nextInt(alphabet.length);
             randomString += alphabet[x];
         }
