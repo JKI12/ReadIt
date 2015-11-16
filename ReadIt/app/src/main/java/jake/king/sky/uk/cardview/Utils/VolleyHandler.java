@@ -47,7 +47,7 @@ public class VolleyHandler {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     // Handle error
-                    callbackService.onFailure(error.toString());
+                    callbackService.onFailure(error);
                 }
             });
 
@@ -68,7 +68,7 @@ public class VolleyHandler {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callbacks.onFailure(error.networkResponse.headers.toString());
+                callbacks.onFailure(error);
             }
         }){
             @Override
@@ -94,16 +94,46 @@ public class VolleyHandler {
             }
         };
 
-        try{
-            System.out.println("HEADERS: " + sr.getHeaders());
-        }catch (AuthFailureError e){
-            System.out.println("AUTH: " + e);
-        }
-
         requestQueue.add(sr);
     }
 
-    public void refreshToken(String refreshToken){
+    public void refreshToken(final String refreshToken, final CallbackService callbacks, final String clientID){
+
+        System.out.println("REFRESH: " + refreshToken);
+
+        StringRequest sr = new StringRequest(Request.Method.POST, "https://www.reddit.com/api/v1/access_token", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callbacks.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callbacks.onFailure(error);
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams() {
+                Map<String,String> params = new HashMap<String, String>();
+                String formatToken = refreshToken.replace("\"", "");
+                params.put("grant_type", "refresh_token");
+                params.put("refresh_token", formatToken);
+
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders(){
+                Map<String, String> headers = new HashMap<String, String>();
+                String auth = "Basic "
+                        + Base64.encodeToString((clientID).getBytes(),
+                        Base64.DEFAULT).replace("=", "6");
+
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        requestQueue.add(sr);
 
     }
 
@@ -122,7 +152,7 @@ public class VolleyHandler {
             {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    callbacks.onFailure(error.toString());
+                    callbacks.onFailure(error);
                 }
             }
         ) {
@@ -156,7 +186,7 @@ public class VolleyHandler {
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callbacks.onFailure(error.toString());
+                        callbacks.onFailure(error);
                     }
                 }
         ) {

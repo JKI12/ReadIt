@@ -9,11 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import jake.king.sky.uk.cardview.Fragment.FragmentHandler;
 import jake.king.sky.uk.cardview.R;
 import jake.king.sky.uk.cardview.Utils.CallbackService;
 import jake.king.sky.uk.cardview.Utils.SensitiveData;
@@ -22,9 +28,14 @@ import jake.king.sky.uk.cardview.Utils.VolleyHandler;
 
 public class ReaditViewActivity extends AppCompatActivity {
 
-    VolleyHandler volleyHandler;
-    SensitiveData sd = new SensitiveData();
-    StringFormatter sf = new StringFormatter();
+    private VolleyHandler volleyHandler;
+    private SensitiveData sd = new SensitiveData();
+    private StringFormatter sf = new StringFormatter();
+    private FragmentHandler fragmentHandler;
+
+    private Gson gson = new Gson();
+
+    private boolean refreshedToken = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,7 @@ public class ReaditViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_readitview);
 
         volleyHandler = new VolleyHandler(getCacheDir());
+        fragmentHandler = new FragmentHandler(getSupportFragmentManager());
 
         getUsersInfo();
         getUsersSubs();
@@ -43,13 +55,19 @@ public class ReaditViewActivity extends AppCompatActivity {
         return sharedpreferences.getString(name, null);
     }
 
+    private void saveString(String name, String value){
+        SharedPreferences sharedpreferences = getSharedPreferences("READIT", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(name, value);
+        editor.apply();
+    }
+
     private void getUsersInfo(){
         final TextView textView = (TextView) findViewById(R.id.readitview_name);
 
         CallbackService callbackService = new CallbackService() {
             @Override
             public void onSuccess(String response) {
-                Gson gson = new Gson();
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
 
@@ -58,8 +76,16 @@ public class ReaditViewActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(String response) {
-                System.out.println("ERROR: " + response);
+            public void onFailure(VolleyError error) {
+
+                if(error instanceof AuthFailureError){
+                    if(!refreshedToken) {
+                        refreshToken();
+                    }
+                }else {
+                    System.out.println(error.toString());
+                }
+
             }
         };
 
@@ -72,22 +98,64 @@ public class ReaditViewActivity extends AppCompatActivity {
         CallbackService callbackService = new CallbackService() {
             @Override
             public void onSuccess(String response) {
-                Gson gson = new Gson();
+
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
-
-                System.out.println(jsonObject);
 
             }
 
             @Override
-            public void onFailure(String response) {
-                System.out.println("ERROR: " + response);
+            public void onFailure(VolleyError error) {
+
+                if(error instanceof AuthFailureError){
+                    if(!refreshedToken) {
+                        refreshToken();
+                    }
+                }else {
+                    System.out.println(error.toString());
+                }
+
             }
         };
 
         volleyHandler.getUsersSubs(getString("access_token"), sd.USER_AGENT, callbackService);
 
+    }
+
+    private void refreshToken(){
+
+        CallbackService callbacks = new CallbackService() {
+            @Override
+            public void onSuccess(String response) {
+                Toast.makeText(getApplicationContext(), "Token Refreshed!", Toast.LENGTH_SHORT).show();
+
+                Gson gson = new Gson();
+                JsonElement element = gson.fromJson(response, JsonElement.class);
+                JsonObject jsonObject = element.getAsJsonObject();
+
+                refreshedToken = true;
+
+                saveString("access_token", jsonObject.get("access_token").toString());
+
+                fragmentHandler.closeLoadingFragment();
+
+                finish();
+                startActivity(getIntent());
+
+            }
+
+            @Override
+            public void onFailure(VolleyError response) {
+                System.out.println("REFRESH ERROR:" + response.toString());
+            }
+        };
+
+        if(getString("refresh_token") != null){
+            volleyHandler.refreshToken(getString("refresh_token"), callbacks, sd.CLIENT_ID);
+            fragmentHandler.showLoadingFragment(findViewById(R.id.readitview_wrapper));
+        }else {
+            System.out.println("No refresh token");
+        }
     }
 
 }
