@@ -73,8 +73,9 @@ public class ReaditViewActivity extends AppCompatActivity {
 
                 textView.setText("Welcome " + sf.formatName(jsonObject.get("name").toString()));
 
-            }
+                fragmentHandler.closeLoadingFragment();
 
+            }
             @Override
             public void onFailure(VolleyError error) {
 
@@ -85,11 +86,12 @@ public class ReaditViewActivity extends AppCompatActivity {
                 }else {
                     System.out.println(error.toString());
                 }
-
             }
         };
 
         volleyHandler.getUsersInfo(getString("access_token"), sd.USER_AGENT, callbackService);
+
+        fragmentHandler.showLoadingFragment(findViewById(R.id.readitview_wrapper));
 
     }
 
@@ -98,12 +100,12 @@ public class ReaditViewActivity extends AppCompatActivity {
         CallbackService callbackService = new CallbackService() {
             @Override
             public void onSuccess(String response) {
-
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
 
-            }
+                fragmentHandler.closeLoadingFragment();
 
+            }
             @Override
             public void onFailure(VolleyError error) {
 
@@ -120,6 +122,7 @@ public class ReaditViewActivity extends AppCompatActivity {
 
         volleyHandler.getUsersSubs(getString("access_token"), sd.USER_AGENT, callbackService);
 
+        fragmentHandler.showLoadingFragment(findViewById(R.id.readitview_wrapper));
     }
 
     private void refreshToken(){
@@ -127,6 +130,9 @@ public class ReaditViewActivity extends AppCompatActivity {
         CallbackService callbacks = new CallbackService() {
             @Override
             public void onSuccess(String response) {
+
+                fragmentHandler.closeLoadingFragment();
+
                 Toast.makeText(getApplicationContext(), "Token Refreshed!", Toast.LENGTH_SHORT).show();
 
                 Gson gson = new Gson();
@@ -136,8 +142,6 @@ public class ReaditViewActivity extends AppCompatActivity {
                 refreshedToken = true;
 
                 saveString("access_token", jsonObject.get("access_token").toString());
-
-                fragmentHandler.closeLoadingFragment();
 
                 finish();
                 startActivity(getIntent());
@@ -157,5 +161,4 @@ public class ReaditViewActivity extends AppCompatActivity {
             System.out.println("No refresh token");
         }
     }
-
 }

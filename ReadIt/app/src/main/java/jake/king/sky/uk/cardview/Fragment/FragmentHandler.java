@@ -16,11 +16,16 @@ public class FragmentHandler {
 
     public void showLoadingFragment(View layout){
 
-        Fragment loadingFragment = new LoadingFragment();
+        Fragment loadingFragment = fragmentManager.findFragmentByTag("loadingFragment");
 
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(layout.getId(), loadingFragment, "loadingFragment");
-        fragmentTransaction.commit();
+        if(loadingFragment == null){
+            loadingFragment = new LoadingFragment();
+
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(layout.getId(), loadingFragment, "loadingFragment");
+            fragmentTransaction.commit();
+        }
+
     }
 
     public void closeLoadingFragment(){
