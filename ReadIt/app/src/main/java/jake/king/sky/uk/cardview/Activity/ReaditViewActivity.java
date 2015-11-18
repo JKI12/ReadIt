@@ -1,6 +1,7 @@
 package jake.king.sky.uk.cardview.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +41,9 @@ public class ReaditViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        overridePendingTransition(0, 0);
+
         setContentView(R.layout.activity_readitview);
 
         volleyHandler = new VolleyHandler(getCacheDir());
@@ -48,6 +52,12 @@ public class ReaditViewActivity extends AppCompatActivity {
         getUsersInfo();
         getUsersSubs();
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
     }
 
     private String getString(String name){
@@ -109,7 +119,6 @@ public class ReaditViewActivity extends AppCompatActivity {
                 }else {
                     System.out.println(error.toString());
                 }
-
             }
         };
 
@@ -149,7 +158,10 @@ public class ReaditViewActivity extends AppCompatActivity {
             volleyHandler.refreshToken(getString("refresh_token"), callbacks, sd.CLIENT_ID);
             fragmentHandler.showLoadingFragment(findViewById(R.id.readitview_wrapper));
         }else {
-            System.out.println("No refresh token");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            saveString("access_token", null);
+            finish();
+            startActivity(intent);
         }
     }
 }
