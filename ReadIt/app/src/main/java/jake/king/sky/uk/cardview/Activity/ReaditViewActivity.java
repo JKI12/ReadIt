@@ -73,8 +73,6 @@ public class ReaditViewActivity extends AppCompatActivity {
 
                 textView.setText("Welcome " + sf.formatName(jsonObject.get("name").toString()));
 
-                fragmentHandler.closeLoadingFragment();
-
             }
             @Override
             public void onFailure(VolleyError error) {
@@ -91,8 +89,6 @@ public class ReaditViewActivity extends AppCompatActivity {
 
         volleyHandler.getUsersInfo(getString("access_token"), sd.USER_AGENT, callbackService);
 
-        fragmentHandler.showLoadingFragment(findViewById(R.id.readitview_wrapper));
-
     }
 
     private void getUsersSubs(){
@@ -102,9 +98,6 @@ public class ReaditViewActivity extends AppCompatActivity {
             public void onSuccess(String response) {
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
-
-                fragmentHandler.closeLoadingFragment();
-
             }
             @Override
             public void onFailure(VolleyError error) {
@@ -121,8 +114,6 @@ public class ReaditViewActivity extends AppCompatActivity {
         };
 
         volleyHandler.getUsersSubs(getString("access_token"), sd.USER_AGENT, callbackService);
-
-        fragmentHandler.showLoadingFragment(findViewById(R.id.readitview_wrapper));
     }
 
     private void refreshToken(){

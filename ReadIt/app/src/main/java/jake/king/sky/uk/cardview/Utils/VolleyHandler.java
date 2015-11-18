@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,7 +30,6 @@ public class VolleyHandler {
         cache = new DiskBasedCache(cacheDirectory, 1024 * 1024);
         network = new BasicNetwork(new HurlStack());
         requestQueue = new RequestQueue(cache, network);
-
         requestQueue.start();
     }
 
@@ -94,6 +94,8 @@ public class VolleyHandler {
             }
         };
 
+        sr.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         requestQueue.add(sr);
     }
 
@@ -133,6 +135,8 @@ public class VolleyHandler {
             }
         };
 
+        sr.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         requestQueue.add(sr);
 
     }
@@ -167,6 +171,8 @@ public class VolleyHandler {
             }
         };
 
+        getInfo.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         requestQueue.add(getInfo);
 
     }
@@ -200,6 +206,8 @@ public class VolleyHandler {
                 return params;
             }
         };
+
+        getInfo.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         requestQueue.add(getInfo);
     }
