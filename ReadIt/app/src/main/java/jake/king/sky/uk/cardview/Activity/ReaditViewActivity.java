@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.TextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,10 +15,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import jake.king.sky.uk.cardview.Fragment.FragmentHandler;
 import jake.king.sky.uk.cardview.R;
@@ -76,16 +71,12 @@ public class ReaditViewActivity extends AppCompatActivity {
     }
 
     private void getUsersInfo(){
-        final TextView textView = (TextView) findViewById(R.id.readitview_name);
 
         CallbackService callbackService = new CallbackService() {
             @Override
             public void onSuccess(String response) {
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
-
-                textView.setText("Welcome " + sf.formatName(jsonObject.get("name").toString()));
-
             }
             @Override
             public void onFailure(VolleyError error) {
@@ -109,8 +100,23 @@ public class ReaditViewActivity extends AppCompatActivity {
         CallbackService callbackService = new CallbackService() {
             @Override
             public void onSuccess(String response) {
+
+                ArrayList<String> subreddits = new ArrayList<String>();
+
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
+
+                JsonObject data = jsonObject.get("data").getAsJsonObject();
+                JsonArray children = data.get("children").getAsJsonArray();
+
+                for(JsonElement child : children) {
+                    JsonObject subreddit = child.getAsJsonObject();
+                    JsonObject subData = subreddit.get("data").getAsJsonObject();
+                    subreddit.add(subData.get("title").toString(), subData.get("display_name"));
+                }
+
+                displaySubreddits(subreddits);
+
             }
             @Override
             public void onFailure(VolleyError error) {
@@ -167,4 +173,9 @@ public class ReaditViewActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    public void displaySubreddits(ArrayList<String> subreddits) {
+
+    }
+
 }

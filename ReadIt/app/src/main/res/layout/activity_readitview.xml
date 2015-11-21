@@ -4,14 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/readitview_wrapper"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/readitview_name"
-        android:gravity="center"
-        android:textStyle="bold"/>
-
+    android:orientation="vertical"
+    android:background="#ccc">
 </RelativeLayout>
-
