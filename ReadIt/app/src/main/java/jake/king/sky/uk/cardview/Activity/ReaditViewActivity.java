@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,6 +18,10 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 
 import jake.king.sky.uk.cardview.Fragment.FragmentHandler;
+import jake.king.sky.uk.cardview.Fragment.LoadingFragment;
+import jake.king.sky.uk.cardview.Fragment.PostsFragment;
+import jake.king.sky.uk.cardview.Models.CardInfo;
+import jake.king.sky.uk.cardview.Models.SubReddit;
 import jake.king.sky.uk.cardview.R;
 import jake.king.sky.uk.cardview.Utils.CallbackService;
 import jake.king.sky.uk.cardview.Utils.SensitiveData;
@@ -39,8 +42,6 @@ public class ReaditViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        overridePendingTransition(0, 0);
 
         setContentView(R.layout.activity_readitview);
 
@@ -101,7 +102,7 @@ public class ReaditViewActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
 
-                ArrayList<String> subreddits = new ArrayList<String>();
+                ArrayList<SubReddit> subreddits = new ArrayList<SubReddit>();
 
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
@@ -112,10 +113,10 @@ public class ReaditViewActivity extends AppCompatActivity {
                 for(JsonElement child : children) {
                     JsonObject subreddit = child.getAsJsonObject();
                     JsonObject subData = subreddit.get("data").getAsJsonObject();
-                    subreddit.add(subData.get("title").toString(), subData.get("display_name"));
+                    subreddits.add(new SubReddit(subData.get("title").toString(), subData.get("url").toString()));
                 }
 
-                displaySubreddits(subreddits);
+                changeFragment(subreddits);
 
             }
             @Override
@@ -140,7 +141,7 @@ public class ReaditViewActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
 
-                fragmentHandler.closeLoadingFragment();
+                fragmentHandler.closeFragment("loading");
 
                 Toast.makeText(getApplicationContext(), "Token Refreshed!", Toast.LENGTH_SHORT).show();
 
@@ -165,7 +166,7 @@ public class ReaditViewActivity extends AppCompatActivity {
 
         if(getString("refresh_token") != null){
             volleyHandler.refreshToken(getString("refresh_token"), callbacks, sd.CLIENT_ID);
-            fragmentHandler.showLoadingFragment(findViewById(R.id.readitview_wrapper));
+            fragmentHandler.addFragment(new LoadingFragment(), "loading", R.id.readitview_wrapper);
         }else {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             saveString("access_token", null);
@@ -174,8 +175,15 @@ public class ReaditViewActivity extends AppCompatActivity {
         }
     }
 
-    public void displaySubreddits(ArrayList<String> subreddits) {
+    private void changeFragment(ArrayList<SubReddit> subreddits) {
+        Fragment postFragment = new PostsFragment();
 
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("SUBS", subreddits);
+
+        postFragment.setArguments(bundle);
+
+        fragmentHandler.replaceFragment(postFragment, "posts", R.id.readitview_wrapper);
     }
 
 }

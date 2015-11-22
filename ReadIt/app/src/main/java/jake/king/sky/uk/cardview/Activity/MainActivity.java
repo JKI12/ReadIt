@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.HashMap;
 
 import jake.king.sky.uk.cardview.Fragment.FragmentHandler;
+import jake.king.sky.uk.cardview.Fragment.LoadingFragment;
 import jake.king.sky.uk.cardview.R;
 import jake.king.sky.uk.cardview.Utils.CallbackService;
 import jake.king.sky.uk.cardview.Utils.RequestUrlMaker;
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             WebView webView = (WebView) findViewById(R.id.redditRequest);
             webView.destroy();
 
-            fragmentHandler.showLoadingFragment(findViewById(R.id.main_wrapper));
+            fragmentHandler.addFragment(new LoadingFragment(), "loading", R.id.main_wrapper);
 
             //Gone to callbacks.html
 
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     CallbackService callbackService = new CallbackService() {
                         @Override
                         public void onSuccess(String response) {
-                            fragmentHandler.closeLoadingFragment();
+                            fragmentHandler.closeFragment("loading");
                             Gson gson = new Gson();
                             JsonElement element = gson.fromJson(response, JsonElement.class);
                             JsonObject jsonObject = element.getAsJsonObject();
@@ -166,13 +167,13 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     switch (query.get("error")) {
                         case "access_denied":
-                            fragmentHandler.closeLoadingFragment();
+                            fragmentHandler.addFragment(new LoadingFragment(), "loading", R.id.main_wrapper);
                             Toast.makeText(getApplicationContext(), "You Rejected Access, Closing App", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
             } else {
-                fragmentHandler.closeLoadingFragment();
+                fragmentHandler.closeFragment("loading");
                 Toast.makeText(getApplicationContext(), "There has been an error", Toast.LENGTH_SHORT).show();
             }
         }

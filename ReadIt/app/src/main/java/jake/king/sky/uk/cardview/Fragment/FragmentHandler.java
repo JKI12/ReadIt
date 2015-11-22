@@ -14,29 +14,30 @@ public class FragmentHandler {
         this.fragmentManager = fragmentManager;
     }
 
-    public void showLoadingFragment(View layout){
+    public void addFragment(Fragment fragment, String fName, int containerId) {
 
-        Fragment loadingFragment = fragmentManager.findFragmentByTag("loadingFragment");
-
-        if(loadingFragment == null){
-            loadingFragment = new LoadingFragment();
-
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(layout.getId(), loadingFragment, "loadingFragment");
-            fragmentTransaction.commit();
-        }
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(containerId, fragment, fName);
+        fragmentTransaction.commitAllowingStateLoss();
 
     }
 
-    public void closeLoadingFragment(){
-        Fragment loadingFragment = fragmentManager.findFragmentByTag("loadingFragment");
+    public void replaceFragment(Fragment fragment, String fName, int containerId) {
+
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(containerId, fragment, fName);
+        fragmentTransaction.commitAllowingStateLoss();
+
+    }
+
+    public void closeFragment(String fName) {
+        Fragment loadingFragment = fragmentManager.findFragmentByTag(fName);
 
         if(loadingFragment != null){
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.remove(loadingFragment);
-            fragmentTransaction.commit();
+            fragmentTransaction.commitAllowingStateLoss();
         }
-
     }
 
 }
