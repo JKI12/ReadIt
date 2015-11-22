@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 
 import jake.king.sky.uk.cardview.Adapter.RvAdapter;
 import jake.king.sky.uk.cardview.Models.CardInfo;
-import jake.king.sky.uk.cardview.Models.SubReddit;
 import jake.king.sky.uk.cardview.R;
 
 public class PostsFragment extends Fragment {
@@ -24,6 +24,9 @@ public class PostsFragment extends Fragment {
     private Activity activity;
     private Context context;
     private View view;
+    private ArrayList<CardInfo> posts;
+
+    private RecyclerView recyclerView;
 
     @Override
     public void onAttach(Context context) {
@@ -37,7 +40,7 @@ public class PostsFragment extends Fragment {
 
         activity = getActivity();
 
-        displayPosts((ArrayList<SubReddit>) getArguments().get("SUBS"));
+        initView();
 
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.push_up_in);
         view.startAnimation(animation);
@@ -45,31 +48,33 @@ public class PostsFragment extends Fragment {
         return view;
     }
 
-    public void displayPosts(ArrayList<SubReddit> subreddits) {
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.readitview_rv);
+    private void initView() {
+
+        posts = (ArrayList<CardInfo>) getArguments().get("SUBS");
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.readitview_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        ArrayList<CardInfo> mockPosts = new ArrayList<CardInfo>();
-        ArrayList<String> links = new ArrayList<String>();
-
-        links.add("http:///www.google.co.uk");
-        links.add("http:///www.youtube.com");
-
-        mockPosts.add(new CardInfo("Test post 1", "Votes: 10", null, links, false));
-        mockPosts.add(new CardInfo("Test post 2", "Votes: 12", null, links, true));
-        mockPosts.add(new CardInfo("Test post 4", "Votes: 1", null, links, false));
-        mockPosts.add(new CardInfo("Test post 4", "Votes: 1", null, links, false));
-        mockPosts.add(new CardInfo("Test post 4", "Votes: 1", null, links, false));
-        mockPosts.add(new CardInfo("Test post 4", "Votes: 1", null, links, false));
-        mockPosts.add(new CardInfo("Test post 4", "Votes: 1", null, links, false));
-        mockPosts.add(new CardInfo("Test post 4", "Votes: 1", null, links, false));
-        mockPosts.add(new CardInfo("Test post 4", "Votes: 1", null, links, false));
-
-        RvAdapter adapter = new RvAdapter(mockPosts, getContext());
+        final RvAdapter adapter = new RvAdapter(posts, getContext());
         recyclerView.setAdapter(adapter);
 
-    }
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
 
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.removeAt(viewHolder.getAdapterPosition());
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+    }
 }

@@ -3,6 +3,8 @@ package jake.king.sky.uk.cardview.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +23,6 @@ import jake.king.sky.uk.cardview.Fragment.FragmentHandler;
 import jake.king.sky.uk.cardview.Fragment.LoadingFragment;
 import jake.king.sky.uk.cardview.Fragment.PostsFragment;
 import jake.king.sky.uk.cardview.Models.CardInfo;
-import jake.king.sky.uk.cardview.Models.SubReddit;
 import jake.king.sky.uk.cardview.R;
 import jake.king.sky.uk.cardview.Utils.CallbackService;
 import jake.king.sky.uk.cardview.Utils.SensitiveData;
@@ -32,7 +33,6 @@ public class ReaditViewActivity extends AppCompatActivity {
 
     private VolleyHandler volleyHandler;
     private SensitiveData sd = new SensitiveData();
-    private StringFormatter sf = new StringFormatter();
     private FragmentHandler fragmentHandler;
 
     private Gson gson = new Gson();
@@ -102,7 +102,7 @@ public class ReaditViewActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
 
-                ArrayList<SubReddit> subreddits = new ArrayList<SubReddit>();
+                ArrayList<String[]> subreddits = new ArrayList<String[]>();
 
                 JsonElement element = gson.fromJson(response, JsonElement.class);
                 JsonObject jsonObject = element.getAsJsonObject();
@@ -113,10 +113,13 @@ public class ReaditViewActivity extends AppCompatActivity {
                 for(JsonElement child : children) {
                     JsonObject subreddit = child.getAsJsonObject();
                     JsonObject subData = subreddit.get("data").getAsJsonObject();
-                    subreddits.add(new SubReddit(subData.get("title").toString(), subData.get("url").toString()));
+                    String[] info = {subData.get("title").toString(), subData.get("url").toString()};
+                    subreddits.add(info);
                 }
 
-                changeFragment(subreddits);
+                //changeFragment(subreddits);
+
+                getPosts(subreddits);
 
             }
             @Override
@@ -175,11 +178,26 @@ public class ReaditViewActivity extends AppCompatActivity {
         }
     }
 
-    private void changeFragment(ArrayList<SubReddit> subreddits) {
+    private void getPosts(ArrayList<String[]> subreddits) {
+
+        ArrayList<CardInfo> posts = new ArrayList<CardInfo>();
+
+        CardInfo mockPost = new CardInfo("Mock post 1", "Votes: 20", BitmapFactory.decodeResource(getResources(), R.drawable.self), null, true);
+        CardInfo mockPost1 = new CardInfo("Mock post 2", "Votes: 23", BitmapFactory.decodeResource(getResources(), R.drawable.self), null, false);
+
+
+
+        posts.add(mockPost); posts.add(mockPost1);
+
+        changeFragment(posts);
+
+    }
+
+    private void changeFragment(ArrayList<CardInfo> posts) {
         Fragment postFragment = new PostsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("SUBS", subreddits);
+        bundle.putSerializable("SUBS", posts);
 
         postFragment.setArguments(bundle);
 

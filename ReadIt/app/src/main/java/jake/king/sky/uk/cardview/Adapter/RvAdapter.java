@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,19 +53,26 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.CardViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(CardViewHolder cardViewHolder, int i) {
+    public void onBindViewHolder(CardViewHolder cardViewHolder, final int i) {
         cardViewHolder.tvPostTitle.setText(posts.get(i).postTitle);
         cardViewHolder.tvPostInfo.setText(posts.get(i).postInfo);
         cardViewHolder.ivPostImage.setImageBitmap(posts.get(i).postPicture);
         if(posts.get(i).nsfw){
-            int color = cardViewHolder.cardView.getContext().getResources().getColor(R.color.red_500);
+            int color = cardViewHolder.cardView.getContext().getResources().getColor(R.color.red_300);
             cardViewHolder.cardView.setCardBackgroundColor(color);
+            cardViewHolder.ivPostImage.setImageDrawable(cardViewHolder.cardView.getContext().getDrawable(R.drawable.nsfw));
         }
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    public void removeAt(int position) {
+        posts.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, posts.size());
     }
 
 }
